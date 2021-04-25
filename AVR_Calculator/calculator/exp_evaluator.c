@@ -1,11 +1,9 @@
+#include "exp_evaluator.h"
+#include "syntax_validator.h"
+#include "../util/stack.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
-#include "../util/stack.h"
-
-#include "exp_evaluator.h"
-#include "syntax_validator.h"
 
 int is_left_assoc(TokenType _operator)
 {
@@ -51,13 +49,13 @@ int shunting_yard(const Token** tokens, size_t tokens_size, Token** rpn_out, siz
 		// 1.2) If token is an operator (x)
 		if (is_operator(type))
 		{
-			// 1.2.1) While there is an operator (y) at the top of the operators stack 
+			// 1.2.1) While there is an operator (y) at the top of the operators stack
 			// and either (x) is left-associative and its precedence is less or equal to that of (y), or (x)
 			// is right-associative and its precedence is less than (y)
 			while (stack->items_inside > 0 &&
-				(  (is_left_assoc(type) && precedence(type) <= precedence(st_peek(stack)->type) ) 
-					||
-				(!is_left_assoc(type) && precedence(type) < precedence(st_peek(stack)->type)))  )
+			(  (is_left_assoc(type) && precedence(type) <= precedence(st_peek(stack)->type) )
+			||
+			(!is_left_assoc(type) && precedence(type) < precedence(st_peek(stack)->type)))  )
 			{
 				if (buffer_index >= output_max_size)
 				{
@@ -127,7 +125,7 @@ int shunting_yard(const Token** tokens, size_t tokens_size, Token** rpn_out, siz
 			if (buffer_index < output_max_size)
 			{
 				rpn_out[buffer_index++] = token;
-			} 
+			}
 			else
 			{
 				status_code = 0;
@@ -176,31 +174,19 @@ int evaluate_rpn(const Token** rpn, size_t size, double* result)
 		}
 		else if (type == UNARY_MINUS)
 		{
-			Token* op = NULL;
-			st_pop(stack, &op);
+			Token* op = st_peek(stack);
 
 			double val = -1 * strtod(op->data, NULL); // changing sign of value
 
-			free(op);
-			op = NULL;
-
 			char data[MAX_WORD_LENGTH];
 			int len = snprintf(data, 16, "%f", val);
-			Token* tk = malloc(sizeof(Token));
-
-			if (tk == NULL)
-			{
-				status_code = 0;
-				break;
-			}
 
 			for (int j = 0; j < len; j++)
 			{
-				tk->data[j] = data[j];
+				op->data[j] = data[j];
 			}
-			tk->word_length = len;
-			tk->type = NUMBER;
-			st_push(stack, tk);
+			op->word_length = len;
+			op->type = NUMBER;
 		}
 		else if (is_operator(type)) // operator but not unary minus
 		{
@@ -211,12 +197,6 @@ int evaluate_rpn(const Token** rpn, size_t size, double* result)
 
 			double val1 = strtod(op1->data, NULL);
 			double val2 = strtod(op2->data, NULL);
-
-			free(op1);
-			free(op2);
-
-			op1 = NULL;
-			op2 = NULL;
 
 			double partial_result = 0;
 
@@ -244,21 +224,14 @@ int evaluate_rpn(const Token** rpn, size_t size, double* result)
 
 			char data[MAX_WORD_LENGTH];
 			int len = snprintf(data, 16, "%f", partial_result);
-			Token* tk = malloc(sizeof(Token));
-
-			if (tk == NULL)
-			{
-				status_code = 0;
-				break;
-			}
-				
+			
 			for (int j = 0; j < len; j++)
 			{
-				tk->data[j] = data[j];
+				op1->data[j] = data[j];
 			}
-			tk->word_length = len;
-			tk->type = NUMBER;
-			st_push(stack, tk);
+			op1->word_length = len;
+			op1->type = NUMBER;
+			st_push(stack, op1);
 		}
 
 		i++;
