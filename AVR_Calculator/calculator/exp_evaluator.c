@@ -1,9 +1,12 @@
-#include "exp_evaluator.h"
-#include "syntax_validator.h"
-#include "../util/stack.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
+
+#include "../util/stack.h"
+#include "exp_evaluator.h"
+#include "syntax_validator.h"
+#include "functions.h"
 
 int is_left_assoc(TokenType _operator)
 {
@@ -16,7 +19,7 @@ int precedence(TokenType _operator)
 	{
 		return 3;
 	}
-	else if (_operator == UNARY_MINUS)
+	else if (_operator == UNARY_MINUS || _operator == IDENT)
 	{
 		return 2;
 	}
@@ -176,11 +179,12 @@ int evaluate_rpn(const Token** rpn, size_t size, double* result)
 		{
 			st_push(stack, token);
 		}
-		else if (type == UNARY_MINUS)
+		else if (type == UNARY_MINUS || type == IDENT)
 		{
 			Token* op = st_peek(stack);
 
-			double val = -1 * strtod(op->data, NULL); // changing sign of value
+			double val = 0; // changing sign of value
+			int stat = evaluate_function(token, op, &val);
 
 			char data[MAX_WORD_LENGTH];
 			int len = snprintf(data, 16, "%f", val);
@@ -192,7 +196,7 @@ int evaluate_rpn(const Token** rpn, size_t size, double* result)
 			op->word_length = len;
 			op->type = NUMBER;
 		}
-		else if (is_operator(type)) // operator but not unary minus
+		else if (is_operator(type)) // operator but not unary minus/function
 		{
 			Token* op1 = NULL; // operands
 			Token* op2 = NULL;
@@ -210,7 +214,7 @@ int evaluate_rpn(const Token** rpn, size_t size, double* result)
 			}
 			else if (type == BINARY_MINUS)
 			{
-				partial_result = val1 - val2;
+				partial_result = val2 - val1;
 			}
 			else if (type == MUL)
 			{
@@ -218,21 +222,17 @@ int evaluate_rpn(const Token** rpn, size_t size, double* result)
 			}
 			else if (type == DIV)
 			{
-				if (val2 == 0)
+				if (val1 == 0)
 				{
 					status_code = 0;
 					break;
 				}
-				partial_result = val1 / val2;
+				partial_result = val2 / val1;
 			}
 			else if (type == POW)
 			{
 				// val1 - exponent
-				partial_result = 1;
-				for (int i = 0; i < val1; i++)
-				{
-					partial_result *= val2;
-				}
+				partial_result = pow(val2, val1);
 			}
 
 			char data[MAX_WORD_LENGTH];

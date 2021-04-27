@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include "interfaces/display.h"
 #include "interfaces/uart.h"
@@ -16,6 +17,7 @@
 int main()
 {
 	display_enable();
+	display_clear();
 
     Token *tokens[MAX_TOKENS];
     size_t tokens_amount = 0;
@@ -23,7 +25,7 @@ int main()
     Token *rpn[MAX_TOKENS];
     size_t tokens_amount_rpn = 0;
 
-    char* exp = "7^3";
+    char* exp = "sqrt(-3600+13600)*(2^(-2)+sin(30*pi/180))"; // supposed to be 75
 
     int success = lex(exp, &tokens, MAX_TOKENS, &tokens_amount);
     if (!success) display_write("lex error");
@@ -42,7 +44,7 @@ int main()
 	
 	char output[STRLEN_CONST];
 	snprintf(output, STRLEN_CONST, "%f", result);
-	
+		
 	display_write(output);
     
     tk_array_free(&tokens, tokens_amount);

@@ -131,6 +131,12 @@
     <Compile Include="calculator\exp_evaluator.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="calculator\functions.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="calculator\functions.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="calculator\lexer.c">
       <SubType>compile</SubType>
     </Compile>

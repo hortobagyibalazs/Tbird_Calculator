@@ -4,6 +4,8 @@
 
 calculator\exp_evaluator.c
 
+calculator\functions.c
+
 calculator\lexer.c
 
 calculator\preprocessor.c

@@ -2,7 +2,7 @@
 
 int is_operator(TokenType type)
 {
-	return type == PLUS || type == BINARY_MINUS || type == UNARY_MINUS || type == MUL || type == DIV || type == POW;
+	return type == PLUS || type == BINARY_MINUS || type == UNARY_MINUS || type == MUL || type == DIV || type == POW || type == IDENT;
 }
 
 int syntax_validate(const Token** tokens, size_t size)
