@@ -45,6 +45,7 @@ C_SRCS +=  \
 ../calculator/preprocessor.c \
 ../calculator/syntax_validator.c \
 ../interfaces/display.c \
+../interfaces/uart.c \
 ../main.c \
 ../util/stack.c \
 ../util/tokens.c
@@ -62,6 +63,7 @@ calculator/lexer.o \
 calculator/preprocessor.o \
 calculator/syntax_validator.o \
 interfaces/display.o \
+interfaces/uart.o \
 main.o \
 util/stack.o \
 util/tokens.o
@@ -72,6 +74,7 @@ calculator/lexer.o \
 calculator/preprocessor.o \
 calculator/syntax_validator.o \
 interfaces/display.o \
+interfaces/uart.o \
 main.o \
 util/stack.o \
 util/tokens.o
@@ -82,6 +85,7 @@ calculator/lexer.d \
 calculator/preprocessor.d \
 calculator/syntax_validator.d \
 interfaces/display.d \
+interfaces/uart.d \
 main.d \
 util/stack.d \
 util/tokens.d
@@ -92,6 +96,7 @@ calculator/lexer.d \
 calculator/preprocessor.d \
 calculator/syntax_validator.d \
 interfaces/display.d \
+interfaces/uart.d \
 main.d \
 util/stack.d \
 util/tokens.d
@@ -139,6 +144,13 @@ calculator/syntax_validator.o: ../calculator/syntax_validator.c
 	
 
 interfaces/display.o: ../interfaces/display.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)D:\Programs\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Programs\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega64 -B "D:\Programs\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\gcc\dev\atmega64" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+interfaces/uart.o: ../interfaces/uart.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)D:\Programs\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Programs\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega64 -B "D:\Programs\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\gcc\dev\atmega64" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

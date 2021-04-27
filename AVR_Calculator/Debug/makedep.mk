@@ -12,6 +12,8 @@ calculator\syntax_validator.c
 
 interfaces\display.c
 
+interfaces\uart.c
+
 main.c
 
 util\stack.c

@@ -7,12 +7,16 @@
 
 int is_left_assoc(TokenType _operator)
 {
-	return 1; // every operator is left associative except '^'
+	return _operator != POW; // every operator is left associative except '^'
 }
 
 int precedence(TokenType _operator)
 {
-	if (_operator == UNARY_MINUS)
+	if (_operator == POW)
+	{
+		return 3;
+	}
+	else if (_operator == UNARY_MINUS)
 	{
 		return 2;
 	}
@@ -220,6 +224,15 @@ int evaluate_rpn(const Token** rpn, size_t size, double* result)
 					break;
 				}
 				partial_result = val1 / val2;
+			}
+			else if (type == POW)
+			{
+				// val1 - exponent
+				partial_result = 1;
+				for (int i = 0; i < val1; i++)
+				{
+					partial_result *= val2;
+				}
 			}
 
 			char data[MAX_WORD_LENGTH];

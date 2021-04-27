@@ -38,6 +38,9 @@ int lex(const char* exp, Token** tokens, size_t tokens_max_size, size_t* tokens_
 		case '/':
 			current = DIV;
 			break;
+		case '^':
+			current = POW;
+			break;
 		case '(':
 			current = LPAR;
 			break;

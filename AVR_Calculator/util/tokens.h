@@ -13,6 +13,7 @@ typedef enum TokenType
 	UNARY_MINUS,
 	MUL,
 	DIV,
+	POW,
 	LPAR,
 	RPAR,
 	IDENT, // could be a function's name or a constant

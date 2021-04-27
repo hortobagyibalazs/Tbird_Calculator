@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include "interfaces/display.h"
+#include "interfaces/uart.h"
 
 #include "util/stack.h"
 
@@ -22,7 +23,7 @@ int main()
     Token *rpn[MAX_TOKENS];
     size_t tokens_amount_rpn = 0;
 
-    char* exp = "-(10*pi+(5*-3))";
+    char* exp = "7^3";
 
     int success = lex(exp, &tokens, MAX_TOKENS, &tokens_amount);
     if (!success) display_write("lex error");
@@ -42,7 +43,7 @@ int main()
 	char output[STRLEN_CONST];
 	snprintf(output, STRLEN_CONST, "%f", result);
 	
-	display_write(output);	
+	display_write(output);
     
     tk_array_free(&tokens, tokens_amount);
 }
