@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 // Enables display
 void display_enable();
 
@@ -28,5 +30,8 @@ int display_is_blink_enabled();
 // Clears entire screen and resets cursor position
 void display_clear();
 
-// Writes text to the screen
-void display_write(char *text);
+// Writes a single character to the screen
+void display_write_char(char ch);
+
+// Writes a string to the screen
+void display_write_str(char *text);

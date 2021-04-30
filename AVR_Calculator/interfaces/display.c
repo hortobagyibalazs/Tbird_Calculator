@@ -191,13 +191,21 @@ void display_clear()
 	LCD_cmd(0x01);	
 }
 
-void display_write(char* text)
+void display_write_char(char ch)
 {
 	safe_init();
 	
-	while (*text)
+	LCD_data(ch);
+}
+
+void display_write_str(char* text)
+{
+	safe_init();
+	
+	int i = 0;
+	while (*(text + i))
 	{
-		LCD_data(*text);
-		text++;
+		LCD_data(*(text + i));
+		i++;
 	}
 }
