@@ -15,7 +15,7 @@
 #include "calculator/exp_evaluator.h"
 
 // The maximum length of an expression. This will be the size of the expression buffer.
-#define MAX_EXP_LEN 64
+#define MAX_EXP_LEN 128
 
 // Fills a string with whitespaces
 void empty_string(char* str, size_t len);
@@ -25,6 +25,9 @@ void process_exp(char* arithm_exp);
 
 // Handles incoming UART messages
 void process_input(char msg);
+
+// Starts new line in terminal and resets expression
+void new_line();
 
 char expression[MAX_EXP_LEN];
 int input_index = 0;
@@ -47,24 +50,30 @@ void process_input(char msg)
 {
 	char equals = '=';
 	char backspace = 0b01111111;
-			
-	if (msg == equals)
+	
+	// Protection from expression buffer overflow
+	if (input_index >= MAX_EXP_LEN)
+	{
+		new_line();
+		
+		char* str = "Expression is too long!";
+		while(*str)
+		{
+			USART0_transmit(*str);
+			str++;
+		}
+		
+		new_line();
+		
+		return;
+	} 
+	// Only handle input if expression buffer hasn't overflown
+	else if (msg == equals)
 	{
 		// Evaluate expression
 		process_exp(expression);
 
-		// Start new line in terminal
-		USART0_transmit('\n');
-				
-		// Reset cursor pos in terminal
-		for (int i = 0; i < input_index; i++)
-		{
-			USART0_transmit(backspace);
-		}
-				
-		// Reset input buffer
-		empty_string(expression, input_index);
-		input_index = 0;
+		new_line();
 	}
 	else if (msg == backspace)
 	{
@@ -131,10 +140,28 @@ void process_exp(char* arithm_exp)
 	char output[STRLEN_CONST];
 	snprintf(output, STRLEN_CONST, "%f", result);
 		
-	//display_clear();
+	display_clear();
 	display_write_str(output);
     
     tk_array_free(&tokens, tokens_amount);
+}
+
+void new_line()
+{
+	char backspace = 0b01111111;
+	
+	// Start new line in terminal
+	USART0_transmit('\n');
+			
+	// Reset cursor pos in terminal
+	for (int i = 0; i < input_index; i++)
+	{
+		USART0_transmit(backspace);
+	}
+			
+	// Reset input buffer
+	empty_string(expression, input_index);
+	input_index = 0;
 }
 
 void empty_string(char* str, size_t len)
