@@ -20,7 +20,11 @@ int str_equals(const char* s1, const char* s2, int len)
 
 int evaluate_function(const Token* _operator, const Token* operand, double* result)
 {
-	double operand_val = strtod(operand->data, NULL);
+	char data[operand->word_length + 1];
+	data[operand->word_length] = '\0';
+	memcpy(data, operand->data, sizeof(char) * operand->word_length);
+	
+	double operand_val = strtod(data, NULL);
 	
 	if (_operator->type == UNARY_MINUS)
 	{

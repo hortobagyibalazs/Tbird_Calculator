@@ -64,7 +64,7 @@ int lex(const char* exp, Token** tokens, size_t tokens_max_size, size_t* tokens_
 			current = UNARY_MINUS;
 		}
 
-		// this is for handling numbers that are made up of more than 1 character i.e: '82', '7.4', '267'
+		// this is for handling tokens that are made up of more than 1 character i.e: '82', '7.4', '267', 'sqrt'
 		if (!((current == NUMBER && prev == NUMBER) || (current == IDENT && prev == IDENT)))
 		{
 			token_num++;
@@ -95,5 +95,6 @@ int lex(const char* exp, Token** tokens, size_t tokens_max_size, size_t* tokens_
 	}
 
 	*tokens_actual_size = token_num + 1;
+	
 	return 1;
 }

@@ -3,6 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
+
+#define F_CPU 8000000UL
+#include <util/delay.h>
 
 #include "interfaces/display.h"
 #include "interfaces/uart.h"
@@ -15,7 +19,7 @@
 #include "calculator/exp_evaluator.h"
 
 // The maximum length of an expression. This will be the size of the expression buffer.
-#define MAX_EXP_LEN 128
+#define MAX_EXP_LEN 96
 
 // Fills a string with whitespaces
 void empty_string(char* str, size_t len);
@@ -103,7 +107,7 @@ void process_exp(char* arithm_exp)
     size_t tokens_amount_rpn = 0;
 
     int success = lex(arithm_exp, &tokens, MAX_TOKENS, &tokens_amount);
-    if (!success) 
+    if (!success)
 	{
 		display_write_str("lex error");
 		tk_array_free(&tokens, tokens_amount);
@@ -137,10 +141,10 @@ void process_exp(char* arithm_exp)
 		return;
 	}
 	
+	
 	char output[STRLEN_CONST];
 	snprintf(output, STRLEN_CONST, "%f", result);
-		
-	display_clear();
+	
 	display_write_str(output);
     
     tk_array_free(&tokens, tokens_amount);
@@ -160,16 +164,6 @@ void new_line()
 	}
 			
 	// Reset input buffer
-	empty_string(expression, input_index);
+	memset(expression, 0, sizeof(expression));
 	input_index = 0;
-}
-
-void empty_string(char* str, size_t len)
-{
-	int i = 0;
-	while (i < len)
-	{
-		*(str + i) = ' ';
-		i++;
-	}
 }

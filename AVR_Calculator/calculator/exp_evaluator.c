@@ -157,7 +157,7 @@ int shunting_yard(const Token** tokens, size_t tokens_size, Token** rpn_out, siz
 	}
 
 	*output_actual_size = buffer_index;
-
+	
 	free(stack);
 	stack = NULL;
 
@@ -183,11 +183,16 @@ int evaluate_rpn(const Token** rpn, size_t size, double* result)
 		{
 			Token* op = st_peek(stack);
 
-			double val = 0; // changing sign of value
+			double val = 0;
 			int stat = evaluate_function(token, op, &val);
+			if (!stat)
+			{
+				status_code = 0;
+				break;
+			}
 
 			char data[MAX_WORD_LENGTH];
-			int len = snprintf(data, 16, "%f", val);
+			int len = snprintf(data, MAX_WORD_LENGTH, "%f", val);
 
 			for (int j = 0; j < len; j++)
 			{
@@ -203,8 +208,17 @@ int evaluate_rpn(const Token** rpn, size_t size, double* result)
 			st_pop(stack, &op1);
 			st_pop(stack, &op2);
 
-			double val1 = strtod(op1->data, NULL);
-			double val2 = strtod(op2->data, NULL);
+			char data1[op1->word_length + 1];
+			char data2[op2->word_length + 1];
+			
+			data1[op1->word_length] = '\0';
+			data2[op2->word_length] = '\0';
+			
+			memcpy(data1, op1->data, sizeof(char) * op1->word_length);
+			memcpy(data2, op2->data, sizeof(char) * op2->word_length);
+
+			double val1 = strtod(data1, NULL);
+			double val2 = strtod(data2, NULL);
 
 			double partial_result = 0;
 
@@ -236,12 +250,13 @@ int evaluate_rpn(const Token** rpn, size_t size, double* result)
 			}
 
 			char data[MAX_WORD_LENGTH];
-			int len = snprintf(data, 16, "%f", partial_result);
-			
+			int len = snprintf(data, MAX_WORD_LENGTH, "%f", partial_result);
+
 			for (int j = 0; j < len; j++)
 			{
 				op1->data[j] = data[j];
 			}
+
 			op1->word_length = len;
 			op1->type = NUMBER;
 			st_push(stack, op1);
@@ -254,9 +269,14 @@ int evaluate_rpn(const Token** rpn, size_t size, double* result)
 	{
 		Token* result_token = NULL;
 		st_pop(stack, &result_token);
-		*result = strtod(result_token->data, NULL);
+		
+		char data[result_token->word_length + 1];
+		data[result_token->word_length] = '\0';
+		memcpy(data, result_token->data, sizeof(char) * result_token->word_length);
+		
+		*result = strtod(data, NULL);
 	}
-
+	
 	free(stack);
 	stack = NULL;
 

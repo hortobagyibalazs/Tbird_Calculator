@@ -36,6 +36,16 @@ void USART0_transmit(unsigned char data)
 	UDR0 = data;
 }
 
+void USART0_transmit_str(char* str)
+{
+	while (*str)
+	{
+		USART0_transmit(*str);
+		str++;
+	}
+}
+
+
 unsigned char USART0_receive()
 {
 	
