@@ -17,6 +17,7 @@
 #include "calculator/preprocessor.h"
 #include "calculator/syntax_validator.h"
 #include "calculator/exp_evaluator.h"
+#include "calculator/memory.h"
 
 // The maximum length of an expression. This will be the size of the expression buffer.
 #define MAX_EXP_LEN 96
@@ -141,6 +142,7 @@ void process_exp(char* arithm_exp)
 		return;
 	}
 	
+	save_result(result);
 	
 	char output[STRLEN_CONST];
 	snprintf(output, STRLEN_CONST, "%f", result);

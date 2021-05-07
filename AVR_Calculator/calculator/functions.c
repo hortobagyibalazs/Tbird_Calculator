@@ -7,7 +7,7 @@
 #include "functions.h"
 #include <math.h>
 
-int str_equals(const char* s1, const char* s2, int len)
+static int str_equals(const char* s1, const char* s2, int len)
 {
 	int i = 0;
 	while (i < len && *(s1 + i) == *(s2 + i))

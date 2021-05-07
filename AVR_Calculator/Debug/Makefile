@@ -43,6 +43,7 @@ C_SRCS +=  \
 ../calculator/exp_evaluator.c \
 ../calculator/functions.c \
 ../calculator/lexer.c \
+../calculator/memory.c \
 ../calculator/preprocessor.c \
 ../calculator/syntax_validator.c \
 ../interfaces/display.c \
@@ -62,6 +63,7 @@ OBJS +=  \
 calculator/exp_evaluator.o \
 calculator/functions.o \
 calculator/lexer.o \
+calculator/memory.o \
 calculator/preprocessor.o \
 calculator/syntax_validator.o \
 interfaces/display.o \
@@ -74,6 +76,7 @@ OBJS_AS_ARGS +=  \
 calculator/exp_evaluator.o \
 calculator/functions.o \
 calculator/lexer.o \
+calculator/memory.o \
 calculator/preprocessor.o \
 calculator/syntax_validator.o \
 interfaces/display.o \
@@ -86,6 +89,7 @@ C_DEPS +=  \
 calculator/exp_evaluator.d \
 calculator/functions.d \
 calculator/lexer.d \
+calculator/memory.d \
 calculator/preprocessor.d \
 calculator/syntax_validator.d \
 interfaces/display.d \
@@ -98,6 +102,7 @@ C_DEPS_AS_ARGS +=  \
 calculator/exp_evaluator.d \
 calculator/functions.d \
 calculator/lexer.d \
+calculator/memory.d \
 calculator/preprocessor.d \
 calculator/syntax_validator.d \
 interfaces/display.d \
@@ -135,6 +140,13 @@ calculator/functions.o: ../calculator/functions.c
 	
 
 calculator/lexer.o: ../calculator/lexer.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)D:\Programs\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Programs\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\include"  -O0 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega64 -B "D:\Programs\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\gcc\dev\atmega64" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+calculator/memory.o: ../calculator/memory.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)D:\Programs\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Programs\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\include"  -O0 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega64 -B "D:\Programs\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\gcc\dev\atmega64" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

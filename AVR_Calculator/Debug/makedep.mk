@@ -8,6 +8,8 @@ calculator\functions.c
 
 calculator\lexer.c
 
+calculator\memory.c
+
 calculator\preprocessor.c
 
 calculator\syntax_validator.c
